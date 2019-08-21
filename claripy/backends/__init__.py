@@ -548,6 +548,24 @@ class Backend:
 
         raise BackendError("backend doesn't support batch_eval()")
 
+    def batch_iterate(self, expr, solver=None):
+        """
+        Evaluate a list expressions
+
+        :param exprs:   A list of expressions to evaluate
+        :param solver: a z3.Optimize object native to the backend, to assist in the evaluation.
+        :return: an iterator of the values for exprs
+        """
+
+        if self._solver_required and solver is None:
+            raise BackendError("%s requires a solver for iterated evaluation" % self.__class__.__name__)
+
+        converted_expr = self.convert(expr)
+        return self._batch_iterate(converted_expr, solver)
+
+    def _batch_iterate(self, expr, solver=None):
+        raise BackendError("backend doesn't support batch_iterate()")
+
     def min(self, expr, extra_constraints=(), solver=None, model_callback=None):
         """
         Return the minimum value of `expr`.

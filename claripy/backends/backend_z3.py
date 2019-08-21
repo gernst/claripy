@@ -657,9 +657,12 @@ class BackendZ3(Backend):
         value = (fp_sign << (ebits + sbits)) | (fp_exp << sbits) | fp_mantissa
         return value
 
+    def _solver(self):
+        return z3.Solver(ctx=self._context)
+
     def solver(self, timeout=None):
         if not self.reuse_z3_solver or getattr(self._tls, 'solver', None) is None:
-            s = z3.Solver(ctx=self._context)
+            s = self._solver()
             _add_memory_pressure(1024 * 1024 * 10)
             if self.reuse_z3_solver:
                 # Store the Z3 solver to a thread-local storage if the reuse-solver option is enabled

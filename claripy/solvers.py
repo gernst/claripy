@@ -15,7 +15,7 @@ class Solver(
     frontend_mixins.SimplifyHelperMixin,
     frontends.FullFrontend
 ):
-    def __init__(self, backend=backends.z3, **kwargs):
+    def __init__(self, backend=backends.QS, **kwargs):
         super(Solver, self).__init__(backend, **kwargs)
 
 class SolverCacheless(
@@ -27,7 +27,7 @@ class SolverCacheless(
     frontend_mixins.SimplifySkipperMixin,
     frontends.FullFrontend
 ):
-    def __init__(self, backend=backends.z3, **kwargs):
+    def __init__(self, backend=backends.QS, **kwargs):
         super(SolverCacheless, self).__init__(backend, **kwargs)
 
 class SolverReplacement(
@@ -108,7 +108,7 @@ class SolverCompositeChild(
     frontend_mixins.ModelCacheMixin,
     frontends.FullFrontend
 ):
-    def __init__(self, backend=backends.z3, **kwargs):
+    def __init__(self, backend=backends.QS, **kwargs):
         super(SolverCompositeChild, self).__init__(backend, **kwargs)
 
     def __repr__(self):
@@ -129,7 +129,7 @@ class SolverComposite(
 ):
     def __init__(self, template_solver=None, track=False, template_solver_string=None, **kwargs):
         template_solver = SolverCompositeChild(track=track) if template_solver is None else template_solver
-        template_solver_string = SolverCompositeChild(track=track, backend=backends.z3) if \
+        template_solver_string = SolverCompositeChild(track=track, backend=backends.QS) if \
             template_solver_string is None else template_solver_string
         super(SolverComposite, self).__init__(template_solver, template_solver_string, track=track, **kwargs)
 

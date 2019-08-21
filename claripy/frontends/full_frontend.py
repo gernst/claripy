@@ -131,6 +131,13 @@ class FullFrontend(ConstrainedFrontend):
         except BackendError as e:
             raise ClaripyFrontendError("Backend error during batch_eval") from e
 
+    def batch_iterate(self, expr):
+        try:
+            return self._solver_backend.batch_iterate(
+                expr=expr, solver=self._get_solver())
+        except BackendError as e:
+            raise ClaripyFrontendError("Backend error during batch_iterate") from e
+
     def max(self, e, extra_constraints=(), exact=None):
         if not self.satisfiable(extra_constraints=extra_constraints):
             raise UnsatError("Unsat during _max()")
