@@ -322,6 +322,28 @@ class CompositeFrontend(ConstrainedFrontend):
         return r
 
     def batch_eval(self, exprs, n, extra_constraints=(), exact=None):
+        if not self.satisfiable(extra_constraints=extra_constraints):
+            raise UnsatError('unsat')
+
+        try:
+            return self._solver_backend.batch_eval(
+                exprs,
+                n,
+                extra_constraints=extra_constraints,
+                solver=self._get_solver(),
+                model_callback=self._model_hook
+            )
+        except BackendError as e:
+            raise ClaripyFrontendError("Backend error during batch_eval") from e
+
+    def batch_iterate(self, expr):
+        try:
+            return self._solver_backend.batch_iterate(
+                expr=expr, solver=self._get_solver())
+        except BackendError as e:
+            raise ClaripyFrontendError("Backend error during batch_iterate") from e
+
+    def batch_eval(self, exprs, n, extra_constraints=(), exact=None):
         self._ensure_sat(extra_constraints=extra_constraints)
 
         ms = self._merged_solver_for(lst2=exprs, lst=extra_constraints)
